@@ -1,0 +1,85 @@
+
+Benchmark of 1000 rounds (excluding 100 rounds warm up) done.
+Setup took: 0ms.
+Issuing for 50 attributes took: 1304ms.
+Proof of Possession took: 963ms.
+AND of |A'|=10 took: 0ms.
+OR took: 0ms.
+ANY(3,A') took: 0ms.
+ANY(5,A') took: 0ms.
+ANY(7,A') took: 0ms.
+ANY(9,A') took: 0ms.
+NAND of |A'|=10 took: 0ms.
+NOR took: 0ms.
+NANY(3,A') took: 0ms.
+NANY(5,A') took: 0ms.
+NANY(7,A') took: 0ms.
+NANY(9,A') took: 0ms.
+
+Benchmark of 1000 rounds (excluding 100 rounds warm up) done.
+Setup took: 0ms.
+Issuing for 100 attributes took: 2265ms.
+Proof of Possession took: 1304ms.
+AND of |A'|=10 took: 0ms.
+OR took: 0ms.
+ANY(3,A') took: 0ms.
+ANY(5,A') took: 0ms.
+ANY(7,A') took: 0ms.
+ANY(9,A') took: 0ms.
+NAND of |A'|=10 took: 0ms.
+NOR took: 0ms.
+NANY(3,A') took: 0ms.
+NANY(5,A') took: 0ms.
+NANY(7,A') took: 0ms.
+NANY(9,A') took: 0ms.
+
+Benchmark of 1000 rounds (excluding 100 rounds warm up) done.
+Setup took: 0ms.
+Issuing for 150 attributes took: 3273ms.
+Proof of Possession took: 1715ms.
+AND of |A'|=10 took: 0ms.
+OR took: 0ms.
+ANY(3,A') took: 0ms.
+ANY(5,A') took: 0ms.
+ANY(7,A') took: 0ms.
+ANY(9,A') took: 0ms.
+NAND of |A'|=10 took: 0ms.
+NOR took: 0ms.
+NANY(3,A') took: 0ms.
+NANY(5,A') took: 0ms.
+NANY(7,A') took: 0ms.
+NANY(9,A') took: 0ms.
+
+Benchmark of 1000 rounds (excluding 100 rounds warm up) done.
+Setup took: 0ms.
+Issuing for 200 attributes took: 4395ms.
+Proof of Possession took: 2228ms.
+AND of |A'|=10 took: 0ms.
+OR took: 0ms.
+ANY(3,A') took: 0ms.
+ANY(5,A') took: 0ms.
+ANY(7,A') took: 0ms.
+ANY(9,A') took: 0ms.
+NAND of |A'|=10 took: 0ms.
+NOR took: 0ms.
+NANY(3,A') took: 0ms.
+NANY(5,A') took: 0ms.
+NANY(7,A') took: 0ms.
+NANY(9,A') took: 0ms.
+
+Benchmark of 1000 rounds (excluding 100 rounds warm up) done.
+Setup took: 0ms.
+Issuing for 250 attributes took: 5614ms.
+Proof of Possession took: 2836ms.
+AND of |A'|=10 took: 0ms.
+OR took: 0ms.
+ANY(3,A') took: 0ms.
+ANY(5,A') took: 0ms.
+ANY(7,A') took: 0ms.
+ANY(9,A') took: 0ms.
+NAND of |A'|=10 took: 0ms.
+NOR took: 0ms.
+NANY(3,A') took: 0ms.
+NANY(5,A') took: 0ms.
+NANY(7,A') took: 0ms.
+NANY(9,A') took: 0ms.
