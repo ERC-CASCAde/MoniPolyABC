@@ -5,7 +5,7 @@
  */
 
 /**
- *
+ * The project is supported by the European Research Council (ERC) under grant agreement no. 716980.
  * @author nsyt1
  */
 public class ABCparam {

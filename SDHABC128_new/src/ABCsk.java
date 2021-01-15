@@ -8,7 +8,7 @@ import org.apache.milagro.amcl.BLS461.BIG;
  */
 
 /**
- *
+ * The project is supported by the European Research Council (ERC) under grant agreement no. 716980.
  * @author nsyt1
  */
 public class ABCsk {

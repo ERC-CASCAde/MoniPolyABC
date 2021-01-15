@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  */
 
 /**
- *
+ * The project is supported by the European Research Council (ERC) under grant agreement no. 716980.
  * @author nsyt1
  */
 public class ABCdemo extends javax.swing.JFrame {
