@@ -1,0 +1,68 @@
+
+Benchmark of 1000 rounds (excluding 100 rounds warm up) done.
+Setup took: 0ms.
+Issuing for 250 attributes took: 1817ms.
+Proof of Possession took: 312ms.
+AND of |A'|=10 took: 327ms.
+OR took: 341ms.
+ANY(3,A') took: 346ms.
+ANY(5,A') took: 351ms.
+ANY(7,A') took: 355ms.
+ANY(9,A') took: 360ms.
+NAND of |A'|=10 took: 525ms.
+NOR took: 377ms.
+NANY(3,A') took: 440ms.
+NANY(5,A') took: 515ms.
+NANY(7,A') took: 603ms.
+NANY(9,A') took: 707ms.
+
+Benchmark of 1000 rounds (excluding 100 rounds warm up) done.
+Setup took: 0ms.
+Issuing for 500 attributes took: 5536ms.
+Proof of Possession took: 584ms.
+AND of |A'|=10 took: 599ms.
+OR took: 612ms.
+ANY(3,A') took: 617ms.
+ANY(5,A') took: 622ms.
+ANY(7,A') took: 627ms.
+ANY(9,A') took: 632ms.
+NAND of |A'|=10 took: 798ms.
+NOR took: 648ms.
+NANY(3,A') took: 712ms.
+NANY(5,A') took: 788ms.
+NANY(7,A') took: 878ms.
+NANY(9,A') took: 979ms.
+
+Benchmark of 1000 rounds (excluding 100 rounds warm up) done.
+Setup took: 0ms.
+Issuing for 750 attributes took: 11189ms.
+Proof of Possession took: 856ms.
+AND of |A'|=10 took: 875ms.
+OR took: 886ms.
+ANY(3,A') took: 892ms.
+ANY(5,A') took: 897ms.
+ANY(7,A') took: 902ms.
+ANY(9,A') took: 907ms.
+NAND of |A'|=10 took: 1074ms.
+NOR took: 922ms.
+NANY(3,A') took: 986ms.
+NANY(5,A') took: 1062ms.
+NANY(7,A') took: 1150ms.
+NANY(9,A') took: 1254ms.
+
+Benchmark of 1000 rounds (excluding 100 rounds warm up) done.
+Setup took: 0ms.
+Issuing for 1000 attributes took: 18790ms.
+Proof of Possession took: 1128ms.
+AND of |A'|=10 took: 1149ms.
+OR took: 1158ms.
+ANY(3,A') took: 1164ms.
+ANY(5,A') took: 1170ms.
+ANY(7,A') took: 1176ms.
+ANY(9,A') took: 1181ms.
+NAND of |A'|=10 took: 1347ms.
+NOR took: 1193ms.
+NANY(3,A') took: 1259ms.
+NANY(5,A') took: 1336ms.
+NANY(7,A') took: 1425ms.
+NANY(9,A') took: 1529ms.

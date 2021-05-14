@@ -20,7 +20,7 @@ import org.apache.milagro.amcl.RAND;
  * The project is supported by the European Research Council (ERC) under grant agreement no. 716980.
  * @author nsyt1
  */
-public class SDHABC {   
+public class SDHABC {  
     /*
     public SDHABC(){
         //gen parameter u for BLS12
@@ -1094,7 +1094,6 @@ public class SDHABC {
         D_bar_l = PAIR.G2mul(D_bar_l, r.powmod(new BIG(threshold), order));
         
         
-        
         //compute witnesses D_i and its bar{W}_i, R_i for R=bar{W}_i^{x'+d_j}R_i       
         d = new BIG[result[0].size()];//result[0].size() equals to threshold
         ECP[] Di = new ECP[d.length-1];
@@ -1241,67 +1240,6 @@ public class SDHABC {
         }
         temp.add(PAIR.G1mul(tempp, e));
         
-        /*//checking
-        ECP left1 = new ECP();
-        int allnum =0;
-        for(int i=0;i<threshold;i++){
-            allnum += i+1;
-            
-            ECP tmp = new ECP();
-            tmp.add(PAIR.G1mul(barWi[i], BIG.modmul(r, d[i], order)));
-            tmp.add(Ri[i]);
-            left1.sub(PAIR.G1mul(tmp, new BIG(i+1)));
-        }        
-        left1.add(PAIR.G1mul(R, new BIG(allnum)));
-        FP12 left11 = PAIR.ate(pk.get_g2(), left1);
-        
-        ECP right1 = new ECP();
-        for(int i=0;i<threshold;i++){
-            right1.add(PAIR.G1mul(barWi[i], r));
-        }
-        FP12 right11 = PAIR.ate(pk.get_X()[2], right1);
-        
-        ECP right2 = new ECP();
-        for(int i=0;i<threshold;i++){
-            right2.add(PAIR.G1mul(barWi[i], BIG.modmul(r, d[0], order)));
-            right2.add(PAIR.G1mul(barWi[i], r));
-            right2.add(Ri[i]);
-        }
-        right2.sub(PAIR.G1mul(R, new BIG(threshold)));
-        
-        left11 = PAIR.fexp(left11);
-        right11.mul(PAIR.ate(pk.get_X()[1], right2));
-        right11 = PAIR.fexp(right11);
-        
-        System.out.println("last stmt: "+left11.equals(right11));
-        
-        ECP allDi1 = new ECP();
-        for(int i=0;i<threshold-1;i++){
-            allDi1.add(Di[i]);            
-        }
-        FP12 leftt = PAIR.ate(pk.get_X()[0], allDi1);
-        leftt.mul(PAIR.ate(D_bar_l, pk.get_a0()));
-        
-        ECP allDi2 = new ECP();
-        for(int i=0;i<threshold;i++){
-            if(i==0){
-                allDi2.add(PAIR.G1mul(pk.get_a0(), r));
-            }else{
-                allDi2.add(PAIR.G1mul(Di[i-1], r));
-            }
-        }
-        FP12 rightt = PAIR.ate(pk.get_X()[1], allDi2);
-        ECP allDi3 = new ECP();
-        for(int i=0;i<threshold;i++){
-            if(i==0){
-                allDi3.add(PAIR.G1mul(pk.get_a0(), BIG.modmul(r, d[i], order)));
-            }else{
-                allDi3.add(PAIR.G1mul(Di[i-1], BIG.modmul(r, d[i], order)));
-            }
-        }
-        rightt.mul(PAIR.ate(pk.get_X()[0], allDi3));
-        System.out.println("second stmt: "+PAIR.fexp(leftt).equals(PAIR.fexp(rightt)));
-        //end*/
         for(int i=0;i<threshold;i++){
             tempp = new ECP();
             if(i==0){
@@ -1396,8 +1334,8 @@ public class SDHABC {
     }
     
     
-    /* Flawed, does not check whether divisor and remainder has common monic divisor
-    public boolean proofOfNAND(ABCpk pk, ABCcred cred, String[] Aprime) throws Exception{
+    //Flawed, does not check whether divisor and remainder has common monic divisor
+    public boolean flawedproofOfNAND(ABCpk pk, ABCcred cred, String[] Aprime) throws Exception{
         try{
         MessageDigest H = MessageDigest.getInstance("SHA-512");
         RAND RNG = new RAND();
@@ -1538,10 +1476,10 @@ public class SDHABC {
         
         return false;
     }
-    */
     
-    /*Flawed, does not check whether divisor and remainder has common monic divisor
-    public boolean proofOfNANY(ABCpk pk, ABCcred cred, int threshold, String[] Aprime) throws Exception{
+    
+    //Flawed, does not check whether divisor and remainder has common monic divisor
+    public boolean flawedproofOfNANY(ABCpk pk, ABCcred cred, int threshold, String[] Aprime) throws Exception{
         try{
         MessageDigest H = MessageDigest.getInstance("SHA-512");
         RAND RNG = new RAND();
@@ -1724,7 +1662,7 @@ public class SDHABC {
         
         return false;
     }
-    */
+    
     
     public ArrayList[] findSame(int threshold, String[] A, String[] Aprime) throws Exception{
         if(threshold<1){
@@ -2010,27 +1948,50 @@ public class SDHABC {
     }
     
     public BigInteger toBigInteger(BIG num){
-        return new BigInteger(num.toString().replaceFirst("^0+(?!$)", ""),16);
+        byte[] b = new byte[CONFIG_BIG.MODBYTES];
+        num.toBytes(b);
+        return new BigInteger(b);
+        //return new BigInteger(num.toString().replaceFirst("^0+(?!$)", ""),16);
     }
     
     public BIG toBIG(BigInteger num){//116 hex char, 512 bits, 64 bytes
-        String str = num.toString(16);
-        String prefix="";
-        if(str.length()<116){
-            
-            for(int i=0;i<116-str.length();i++){
-                prefix+="0";
+//        String str = num.toString(16);
+//        String prefix="";
+//        if(str.length()<116){
+//            
+//            for(int i=0;i<116-str.length();i++){
+//                prefix+="0";
+//            }
+//            prefix+=str;
+//        }
+//        
+//        byte[] val = new byte[prefix.length() / 2];
+//        for (int i = 0; i < val.length; i++) {
+//            int index = i * 2;
+//            int j = Integer.parseInt(prefix.substring(index, index + 2), 16);
+//            val[i] = (byte) j;
+//        }
+//        return BIG.fromBytes(val);
+        
+        
+        byte[] b = new byte[CONFIG_BIG.MODBYTES];        
+        byte[] val = num.toByteArray();
+        
+        int j=val.length-1;
+        for(int i=b.length-1;i>=0;i--){
+            if(j>-1){
+                b[i] = val[j];
+                j--;
+            }else{
+                if(num.signum()==-1){
+                    b[i] = (byte) 0xff;
+                }else{
+                    b[i] = (byte) 0x00;
+                }
             }
-            prefix+=str;
         }
         
-        byte[] val = new byte[prefix.length() / 2];
-        for (int i = 0; i < val.length; i++) {
-            int index = i * 2;
-            int j = Integer.parseInt(prefix.substring(index, index + 2), 16);
-            val[i] = (byte) j;
-        }
-        return BIG.fromBytes(val);
+        return BIG.fromBytes(b);
     }
     
     /*

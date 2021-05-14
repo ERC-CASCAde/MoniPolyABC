@@ -486,11 +486,18 @@ public class ABCdemo extends javax.swing.JFrame {
         // TODO add your handling code here:
         try{
         TextArea.append("\nNANY proof starts....\n");
+//        nanyT = System.nanoTime();
+//        boolean result = abc.flawedproofOfNANY(pk, cred, Integer.parseInt(nThresholdText.getText()), nanyText.getText().split(","));
+//        nanyT = System.nanoTime() - nanyT;
+//        
+//        TextArea.append("NANY proof: P(pk,cred,NOTANY(d,A'))<->V(pk,NOTANY(d,A')) completed?\n" +result+", in "+TimeUnit.MILLISECONDS.convert(nanyT, TimeUnit.NANOSECONDS)+"ms.\n");
+//        
         nanyT = System.nanoTime();
         boolean result = abc.proofOfNANY(pk, cred, Integer.parseInt(nThresholdText.getText()), nanyText.getText().split(","));
         nanyT = System.nanoTime() - nanyT;
         
-        TextArea.append("NANY proof: P(pk,cred,NOTANY(d,A'))<->V(pk,NOTANY(d,A')) completed?\n" +result+", in "+TimeUnit.MILLISECONDS.convert(nanyT, TimeUnit.NANOSECONDS)+"ms.\n");
+        TextArea.append("Flawed NANY proof: P(pk,cred,NOTANY(d,A'))<->V(pk,NOTANY(d,A')) completed?\n" +result+", in "+TimeUnit.MILLISECONDS.convert(nanyT, TimeUnit.NANOSECONDS)+"ms.\n");
+        
         }catch(Exception ex){
             TextArea.append("Fails: "+ex.getMessage()+"\n");
         }
@@ -674,11 +681,17 @@ public class ABCdemo extends javax.swing.JFrame {
         // TODO add your handling code here:
         try{
         TextArea.append("\nNAND proof starts....\n");
+//        nandT = System.nanoTime();
+//        boolean result = abc.flawedproofOfNAND(pk, cred, nandText.getText().split(","));
+//        nandT = System.nanoTime() - nandT;
+//        
+//        TextArea.append("NAND proof: P(pk,cred,NAND(A'))<->V(pk,NAND(A')) completed?\n" +result+", in "+TimeUnit.MILLISECONDS.convert(nandT, TimeUnit.NANOSECONDS)+"ms.\n");
+//        
         nandT = System.nanoTime();
         boolean result = abc.proofOfNAND(pk, cred, nandText.getText().split(","));
         nandT = System.nanoTime() - nandT;
+        TextArea.append("Flawed NAND proof: P(pk,cred,NAND(A'))<->V(pk,NAND(A')) completed?\n" +result+", in "+TimeUnit.MILLISECONDS.convert(nandT, TimeUnit.NANOSECONDS)+"ms.\n");
         
-        TextArea.append("NAND proof: P(pk,cred,NAND(A'))<->V(pk,NAND(A')) completed?\n" +result+", in "+TimeUnit.MILLISECONDS.convert(nandT, TimeUnit.NANOSECONDS)+"ms.\n");
         }catch(Exception ex){
             TextArea.append("Fails: "+ex.getMessage()+"\n");
         }
