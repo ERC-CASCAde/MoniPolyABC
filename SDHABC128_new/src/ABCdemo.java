@@ -208,7 +208,7 @@ public class ABCdemo extends javax.swing.JFrame {
 
         jLabel7.setText("4. NANY(d=");
 
-        nThresholdText.setText("2");
+        nThresholdText.setText("1");
 
         jLabel8.setText(", A'=");
 

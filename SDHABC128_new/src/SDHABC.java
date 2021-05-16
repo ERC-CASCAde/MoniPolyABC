@@ -1880,7 +1880,7 @@ public class SDHABC {
     */
     
     /*
-    * @return BIG[] with last element BIG[1] as the remainder.
+    * @return BIG[] with the first element BIG[0] as quotient and the last element BIG[1] as remainder.
     */
     public BIG[][] syntheticDivision(BIG[] dvdend, BIG[] dvsor){
         //BIG order = new BIG(ROM.CURVE_Order);

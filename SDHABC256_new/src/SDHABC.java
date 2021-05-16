@@ -215,7 +215,7 @@ public class SDHABC {
                         
             for(int i=0;i<attr.length;i++){                
                 byte[] temp = H.digest(A[i].getBytes());
-                byte[] hash = new byte[80];
+                byte[] hash = new byte[CONFIG_BIG.MODBYTES];
                 for(int j=0;j<hash.length;j++){
                     if(j<temp.length)
                         hash[j]=temp[j];
@@ -225,7 +225,7 @@ public class SDHABC {
                 attr[i]= BIG.fromBytes(hash);
                 attr[i].mod(order);
             }
-            alphas = convertToAlphas(attr, order);
+            alphas = MPEncode(attr, order);
             
             //user chooses random tilde{s,alpha_0,...\alpha_n}
             BIG s1 = BIG.randomnum(order,RNG);
@@ -351,7 +351,7 @@ public class SDHABC {
         BIG[] w = new BIG[cred.get_A().length-1];
         for(int i=0;i<w.length;i++){
              byte[] temp = H.digest(cred.get_A()[i].getBytes());
-                byte[] hash = new byte[80];
+                byte[] hash = new byte[CONFIG_BIG.MODBYTES];
                 for(int j=0;j<hash.length;j++){
                     if(j<temp.length)
                         hash[j]=temp[j];
@@ -361,7 +361,7 @@ public class SDHABC {
             w[i] = BIG.fromBytes(hash);
             w[i].mod(order);
         }
-        w = convertToAlphas(w,order);        
+        w = MPEncode(w,order);        
         
         //ECP M = PAIR.G1mul(pk.get_a0(), cred.get_alphas()[0]);
         ECP W = PAIR256.G1mul(pk.get_a0(), w[0]);
@@ -386,7 +386,7 @@ public class SDHABC {
         _o1.mod(order);
         
         byte[] temph = H.digest(cred.get_A()[cred.get_A().length-1].getBytes());
-        byte[] hash = new byte[80];
+        byte[] hash = new byte[CONFIG_BIG.MODBYTES];
         for(int j=0;j<hash.length;j++){
             if(j<temph.length)
                 hash[j]=temph[j];
@@ -464,7 +464,7 @@ public class SDHABC {
             m = new BIG[result[0].size()];
             for(int i=0;i<m.length;i++){
                  byte[] temp = H.digest(result[0].get(i).getBytes());
-                byte[] hash = new byte[80];
+                byte[] hash = new byte[CONFIG_BIG.MODBYTES];
                 for(int j=0;j<hash.length;j++){
                     if(j<temp.length)
                         hash[j]=temp[j];
@@ -475,7 +475,7 @@ public class SDHABC {
                 m[i].mod(order);
             }
             //encode them
-            m = syntheticDivision(cred.get_alphas(),convertToAlphas(m, order))[0];
+            m = syntheticDivision(cred.get_alphas(),MPEncode(m, order))[0];
         }
         else{
             m = new BIG[1];
@@ -536,7 +536,7 @@ public class SDHABC {
         BIG[] z = new BIG[Aprime.length];
         for(int i=0;i<Aprime.length;i++){
             byte[] temp = H.digest(Aprime[i].getBytes());
-            byte[] hash = new byte[80];
+            byte[] hash = new byte[CONFIG_BIG.MODBYTES];
                 for(int j=0;j<hash.length;j++){
                     if(j<temp.length)
                         hash[j]=temp[j];
@@ -546,7 +546,7 @@ public class SDHABC {
             z[i] = BIG.fromBytes(hash);
             z[i].mod(order);
         }
-        z = convertToAlphas(z, order);
+        z = MPEncode(z, order);
         
         ECP8 temp2 = PAIR256.G2mul(pk.get_g2(), z[0]);
         for(int i=1;i<z.length;i++){
@@ -609,7 +609,7 @@ public class SDHABC {
         //threshold must >0
         for(int i=0;i<w.length;i++){
             byte[] temp = H.digest(result[0].get(i).getBytes());
-            byte[] hash = new byte[80];
+            byte[] hash = new byte[CONFIG_BIG.MODBYTES];
                 for(int j=0;j<hash.length;j++){
                     if(j<temp.length)
                         hash[j]=temp[j];
@@ -619,7 +619,7 @@ public class SDHABC {
             w[i] = BIG.fromBytes(hash);
             w[i].mod(order);
         }
-        w = convertToAlphas(w,order);   
+        w = MPEncode(w,order);   
         
         if(threshold<cred.get_A().length){            
             m = syntheticDivision(cred.get_alphas(),w)[0];
@@ -634,7 +634,7 @@ public class SDHABC {
             barw = new BIG[result[1].size()];
             for(int i=0;i<barw.length;i++){
                 byte[] temp = H.digest(result[1].get(i).getBytes());
-                byte[] hash = new byte[80];
+                byte[] hash = new byte[CONFIG_BIG.MODBYTES];
                 for(int j=0;j<hash.length;j++){
                     if(j<temp.length)
                         hash[j]=temp[j];
@@ -645,7 +645,7 @@ public class SDHABC {
                 barw[i].mod(order);
             }
             
-            barw = convertToAlphas(barw,order);        
+            barw = MPEncode(barw,order);        
         }
         else{
             barw = new BIG[1];
@@ -735,7 +735,7 @@ public class SDHABC {
         BIG[] z = new BIG[Aprime.length];
         for(int i=0;i<Aprime.length;i++){
             byte[] temp = H.digest(Aprime[i].getBytes());
-            byte[] hash = new byte[80];
+            byte[] hash = new byte[CONFIG_BIG.MODBYTES];
                 for(int j=0;j<hash.length;j++){
                     if(j<temp.length)
                         hash[j]=temp[j];
@@ -745,7 +745,7 @@ public class SDHABC {
             z[i] = BIG.fromBytes(hash);  
             z[i].mod(order);
         }
-        z = convertToAlphas(z, order);
+        z = MPEncode(z, order);
         ECP temp=PAIR256.G1mul(pk.get_a()[0], z[0]);
         for(int i=1;i<z.length;i++){
             temp.add(PAIR256.G1mul(pk.get_a()[i], z[i]));            
@@ -784,7 +784,604 @@ public class SDHABC {
         return false;
     }
     
+    
     public boolean proofOfNAND(ABCpk pk, ABCcred cred, String[] Aprime) throws Exception{
+        try{
+        MessageDigest H = MessageDigest.getInstance("SHA-512");
+        RAND RNG = new RAND();
+        BIG r,y,_r,_y,_ty,_s;        
+        BIG order = new BIG(ROM.CURVE_Order);
+        BIG[] w, d, barr;
+        BIG[][] barw;
+        
+        //if threshold doesn't met, exception thrown
+        //so, we don't need to perform a check anymore
+        ArrayList<String>[] result = findNotSame(Aprime.length,cred.get_A(),Aprime);                
+                
+        //those not-same attributes        
+        BIG[] m = new BIG[result[0].size()];
+        for(int i=0;i<m.length;i++){            
+            byte[] temp = H.digest(result[0].get(i).getBytes());
+                byte[] hash = new byte[CONFIG_BIG.MODBYTES];
+                for(int j=0;j<hash.length;j++){
+                    if(j<temp.length)
+                        hash[j]=temp[j];
+                    else
+                        hash[j]=0x00;
+                }
+            m[i] = BIG.fromBytes(hash);
+            m[i].mod(order);
+        }
+                
+        BIG[][] division = syntheticDivision(cred.get_alphas(),
+                                             MPEncode(m, order));
+        w = division[0]; //quotient
+        d = division[1]; //remainder
+        
+        barw = new BIG[m.length][division[1].length-1]; 
+        barr = new BIG[m.length]; 
+        for(int i=0;i<m.length;i++){
+            BIG[] m_i = new BIG[1];
+            m_i[0] = new BIG(m[i]);
+            division = syntheticDivision(d, MPEncode(m_i, order));
+            
+            for(int j=0;j<division[0].length;j++){
+                barw[i][j] = division[0][j];
+            }
+             
+            barr[i] = division[1][0];            
+        }
+        
+        SecureRandom rand = new SecureRandom();
+        RNG.clean();
+	RNG.seed(100,rand.generateSeed(100));
+        
+        
+        r = BIG.randomnum(order,RNG);
+        y = BIG.randomnum(order,RNG);
+        BIG yinv=new BIG(y);
+        yinv.invmodp(order);
+        _r = BIG.randomnum(order,RNG);
+        _y = BIG.randomnum(order,RNG);
+        _ty = BIG.randomnum(order,RNG);
+        _s = BIG.randomnum(order,RNG);
+        
+        ECP vprime = PAIR256.G1mul(cred.get_v(), BIG.modmul(r, yinv, order));
+        ECP V = PAIR256.G1mul(vprime, _y);
+                
+        ECP W = PAIR256.G1mul(pk.get_a0(),w[0]);
+        for(int i=1;i<w.length;i++){
+            W.add(PAIR256.G1mul(pk.get_a()[i], w[i]));
+        }
+        W = PAIR256.G1mul(W, r);
+        
+        ECP R = PAIR256.G1mul(pk.get_a0(),d[0]);
+        for(int i=1;i<d.length;i++){
+            R.add(PAIR256.G1mul(pk.get_a()[i], d[i]));
+        }
+        R = PAIR256.G1mul(R, r);
+        
+        ECP[] barWi = new ECP[barw.length];
+        
+        for(int i=0;i<barw.length;i++){
+            barWi[i] = PAIR256.G1mul(pk.get_a0(),barw[i][0]);
+            for(int j=1;j<barw[i].length;j++){
+                barWi[i].add(PAIR256.G1mul(pk.get_a()[j], barw[i][j]));
+            }
+            barWi[i] = PAIR256.G1mul(barWi[i], r);
+        }
+        
+        
+        ECP[] Ri = new ECP[barr.length];
+        for(int i=0;i<barr.length;i++){
+            Ri[i] = PAIR256.G1mul(pk.get_a0(),barr[i]);
+            Ri[i] = PAIR256.G1mul(Ri[i], r);
+        }
+                    
+        
+        ECP Y = PAIR256.G1mul(vprime, _ty);
+        Y.add(PAIR256.G1mul(pk.get_c(), _r));
+        Y.add(PAIR256.G1mul(pk.get_b(), _s));        
+        
+        //verifier replies a challenge
+        BIG e = BIG.randomnum(order,RNG);        
+      
+        //prover sends response
+        //\hat{r}=\tilde{r}+er
+        _r.add(BIG.modmul(e, r, order));
+        _r.mod(order);        
+        //\hat{y}=\tilde{y}+ey
+        _y.add(BIG.modmul(e, y, order));        
+        _y.mod(order);
+        //\hat{t_y}=\tilde{t_y}-ety
+        _ty.sub(BIG.modmul(e, BIG.modmul(cred.get_t(), y, order), order));  
+        _ty.mod(order);
+        //\hat{s}=\tilde{s}+esr
+        _s.add(BIG.modmul(e, BIG.modmul(cred.get_s(),r,order), order));
+        _s.mod(order);
+        
+        
+        //verifier checks        
+        //new checking, only 3 pairings 
+        FP48[] ll=PAIR256.initmp();       
+        if(R.is_infinity() || W.is_infinity()){
+            return false;
+        }
+        for(int i=0;i<barWi.length;i++){
+            if(Ri[i].is_infinity() || barWi[i].is_infinity()){
+                return false;
+            }
+        }
+        
+        BIG exp = new BIG();
+        exp.one();
+        for(int i=0;i<Aprime.length;i++){
+            exp.add(new BIG(i+1));
+        }
+        
+        ECP temp = PAIR256.G1mul(R, BIG.modmul(e, exp, order));
+           
+        for(int i=0;i<barWi.length;i++){
+            temp.sub(PAIR256.G1mul(barWi[i], BIG.modmul(e, BIG.modmul(m[i], new BIG(i+1), order), order)));
+            temp.sub(PAIR256.G1mul(Ri[i], BIG.modmul(e, new BIG(i+1), order)));
+        }
+        
+        temp.add(PAIR256.G1mul(pk.get_b(), _s));
+        temp.add(PAIR256.G1mul(pk.get_c(), _r));
+        temp.add(PAIR256.G1mul(vprime, _ty));        
+        temp.sub(Y);
+	PAIR256.another(ll,pk.get_g2(), temp);
+	
+        ECP temp1 = PAIR256.G1mul(W, e);        
+        
+        m = new BIG[Aprime.length];
+        for(int i=0;i<Aprime.length;i++){
+           byte[] temph = H.digest(Aprime[i].getBytes());
+                byte[] hash = new byte[CONFIG_BIG.MODBYTES];
+                for(int j=0;j<hash.length;j++){
+                    if(j<temph.length)
+                        hash[j]=temph[j];
+                    else
+                        hash[j]=0x00;
+                }
+            m[i] = BIG.fromBytes(hash);
+            m[i].mod(order);
+        }
+        m = MPEncode(m, order);
+        
+        ECP8 temp2 = PAIR256.G2mul(pk.get_g2(), m[0]);
+        for(int i=1;i<m.length;i++){
+            temp2.add(PAIR256.G2mul(pk.get_X()[i], m[i]));            
+        }
+        
+        PAIR256.another(ll,temp2, temp1);                        
+	FP48 left=PAIR256.fexp(PAIR256.miller(ll));
+                       
+        
+        temp = PAIR256.G1mul(vprime, _y);
+        temp.sub(V);
+       
+        
+	FP48 right=PAIR256.ate(pk.get_g2x(), temp);
+        
+        temp = new ECP();
+        temp.inf();
+        for(int i=0;i<barWi.length;i++){
+            temp.add(barWi[i]);
+        }
+        temp = PAIR256.G1mul(temp, e);
+        
+        right.mul(PAIR256.ate(pk.get_X()[2], temp));
+        
+        temp = new ECP();
+        temp.inf();
+        m = new BIG[Aprime.length];
+        for(int i=0;i<Aprime.length;i++){
+            byte[] temph = H.digest(Aprime[i].getBytes());
+                byte[] hash = new byte[CONFIG_BIG.MODBYTES];
+                for(int j=0;j<hash.length;j++){
+                    if(j<temph.length)
+                        hash[j]=temph[j];
+                    else
+                        hash[j]=0x00;
+                }
+            m[i] = BIG.fromBytes(hash);
+            m[i].mod(order);
+        }
+        for(int i=0;i<barWi.length;i++){
+            exp = new BIG(m[i]);
+            exp.add(new BIG(i+1));
+            
+            temp.add(PAIR256.G1mul(barWi[i], BIG.modmul(e, exp, order)));
+            temp.add(PAIR256.G1mul(Ri[i], e));
+        } 
+        temp.sub(PAIR256.G1mul(R, BIG.modmul(e, new BIG(Aprime.length), order)));
+        
+        right.mul(PAIR256.ate(pk.get_X()[1],temp));
+                
+        if(left.equals(PAIR256.fexp(right))){
+            return true;
+        }
+        else{
+            return false;
+        }
+        }
+        catch(NoSuchAlgorithmException e){
+            Logger.getLogger(SDHABC.class.getName()).log(Level.SEVERE, null, e);
+        } catch (Exception ex) {
+            Logger.getLogger(SDHABC.class.getName()).log(Level.SEVERE, null, ex);
+            throw new Exception("NAND proof: "+ex.getMessage());            
+        }
+        
+        return false;
+    }
+    
+    
+    
+    public boolean proofOfNANY(ABCpk pk, ABCcred cred, int threshold, String[] Aprime) throws Exception{
+        try{
+        MessageDigest H = MessageDigest.getInstance("SHA-512");
+        RAND RNG = new RAND();
+        BIG r,y,_r,_y,_ty,_s;
+        BIG[] _di0,_di1;        
+        BIG order = new BIG(ROM.CURVE_Order);
+        BIG[] w, mathsf_r;
+        
+        //if threshold doesn't met, exception thrown
+        //so, we don't need to perform a check anymore
+        ArrayList<String>[] result = findNotSame(threshold,cred.get_A(),Aprime);                
+                
+        //those not-same attributes D       
+        BIG[] d = new BIG[result[0].size()];
+        for(int i=0;i<d.length;i++){            
+            byte[] temp = H.digest(result[0].get(i).getBytes());
+                byte[] hash = new byte[CONFIG_BIG.MODBYTES];
+                for(int j=0;j<hash.length;j++){
+                    if(j<temp.length)
+                        hash[j]=temp[j];
+                    else
+                        hash[j]=0x00;
+                }
+            d[i] = BIG.fromBytes(hash);
+            d[i].mod(order);
+        }
+        d = MPEncode(d, order);
+        
+        //compute witness D_\bar{l} for the divisor D
+        ECP8 D_bar_l = new ECP8();
+        for(int i=0;i<d.length;i++){
+            D_bar_l.add(PAIR256.G2mul(pk.get_X()[i], d[i]));
+        }
+        
+        //those remaining attributes in A', i.e., A'-D, can be mixture of same and not same
+        BIG[] m2 = new BIG[result[1].size()];
+        for(int i=0;i<m2.length;i++){            
+            byte[] temp = H.digest(result[1].get(i).getBytes());
+                byte[] hash = new byte[CONFIG_BIG.MODBYTES];
+                for(int j=0;j<hash.length;j++){
+                    if(j<temp.length)
+                        hash[j]=temp[j];
+                    else
+                        hash[j]=0x00;
+                }
+            m2[i] = BIG.fromBytes(hash);
+            m2[i].mod(order);
+        }
+        m2 = MPEncode(m2, order);
+        
+        //compute witness W' for A'-D
+        ECP Wprime = PAIR256.G1mul(pk.get_a0(),m2[0]);
+        for(int i=1;i<m2.length;i++){
+            Wprime.add(PAIR256.G1mul(pk.get_a()[i], m2[i]));
+        }
+        
+        BIG[][] division = syntheticDivision(cred.get_alphas(),d);
+        w = division[0]; //quotient
+        mathsf_r = division[1]; //remainder
+                     
+        //compute witness W for quotient
+        ECP W = new ECP();
+        for(int i=0;i<w.length;i++){
+            W.add(PAIR256.G1mul(pk.get_a()[i], w[i]));
+        }
+        
+        //compute witness R for remainder
+        ECP R = new ECP();
+        for(int i=0;i<mathsf_r.length;i++){
+            R.add(PAIR256.G1mul(pk.get_a()[i], mathsf_r[i]));            
+        }
+        
+        SecureRandom rand = new SecureRandom();
+        RNG.clean();
+	RNG.seed(100,rand.generateSeed(100));
+        
+        r = BIG.randomnum(order,RNG);
+        y = BIG.randomnum(order,RNG);
+        BIG yinv=new BIG(y);
+        yinv.invmodp(order);
+        _r = BIG.randomnum(order,RNG);
+        _y = BIG.randomnum(order,RNG);
+        _ty = BIG.randomnum(order,RNG);
+        _s = BIG.randomnum(order,RNG);
+        
+        _di0 = new BIG[threshold];
+        _di1 = new BIG[threshold];
+        for(int i=0;i<threshold;i++){
+            _di0[i] = BIG.randomnum(order,RNG);
+            _di1[i] = BIG.randomnum(order,RNG);
+        }
+        
+        ECP vprime = PAIR256.G1mul(cred.get_v(), BIG.modmul(r.powmod(new BIG(threshold+1), order), yinv, order));
+        ECP V = PAIR256.G1mul(vprime, _y);
+        
+        //randomize the witnesses
+        W = PAIR256.G1mul(W, r);
+        R = PAIR256.G1mul(R, r.powmod(new BIG(threshold+1), order));
+        
+        BIG rinv = r.powmod(new BIG(threshold), order);
+        rinv.invmodp(order);
+        Wprime = PAIR256.G1mul(Wprime, rinv);
+                
+        D_bar_l = PAIR256.G2mul(D_bar_l, r.powmod(new BIG(threshold), order));
+        
+        
+        //compute witnesses D_i and its bar{W}_i, R_i for R=bar{W}_i^{x'+d_j}R_i       
+        d = new BIG[result[0].size()];//result[0].size() equals to threshold
+        ECP[] Di = new ECP[d.length-1];
+        ECP[] barWi = new ECP[d.length];
+        ECP[] Ri = new ECP[d.length];
+        for(int i=0;i<d.length;i++){            
+            byte[] temp = H.digest(result[0].get(i).getBytes());
+                byte[] hash = new byte[CONFIG_BIG.MODBYTES];
+                for(int j=0;j<hash.length;j++){
+                    if(j<temp.length)
+                        hash[j]=temp[j];
+                    else
+                        hash[j]=0x00;
+                }
+            d[i] = BIG.fromBytes(hash);
+            d[i].mod(order);
+            
+            BIG[] tmp = new BIG[i+1];
+            for(int j=0;j<i+1;j++){
+                tmp[j] = new BIG(d[j]);
+            }
+            tmp = MPEncode(tmp, order);
+            
+            if(i<Di.length){
+                Di[i] = new ECP();
+                for(int j=0;j<tmp.length;j++){
+                    Di[i].add(PAIR256.G1mul(pk.get_a()[j], tmp[j]));
+                }
+                Di[i] = PAIR256.G1mul(Di[i], r.powmod(new BIG(i+1), order));
+            }
+            tmp = new BIG[1];
+            tmp[0] = new BIG(d[i]);            
+            BIG[][] div = syntheticDivision(mathsf_r,MPEncode(tmp,order));
+            BIG[] barw = div[0]; //quotient
+            BIG[] barmathsf_r = div[1]; //remainder
+            
+            barWi[i] = new ECP();
+            for(int j=0;j<barw.length;j++){
+                barWi[i].add(PAIR256.G1mul(pk.get_a()[j], barw[j]));
+            }
+            barWi[i] = PAIR256.G1mul(barWi[i], r.powmod(new BIG(threshold), order));
+            
+            Ri[i] = PAIR256.G1mul(pk.get_a0(), BIG.modmul(barmathsf_r[0],r.powmod(new BIG(threshold+1), order), order));            
+        }
+                        
+        ECP Y1 = PAIR256.G1mul(vprime, _ty);
+        Y1.add(PAIR256.G1mul(pk.get_c(), _r));
+        Y1.add(PAIR256.G1mul(pk.get_b(), _s));
+                
+        ECP Y2 = new ECP();
+        for(int i=0;i<threshold;i++){
+            ECP temp = new ECP();
+            if(i==0){
+                temp.add(pk.get_a0());
+            }
+            else{
+                temp.add(Di[i-1]);
+            }
+            temp.add(PAIR256.G1mul(barWi[i], new BIG(i+1)));
+            temp.neg();
+            temp = PAIR256.G1mul(temp, _di0[i]);
+            Y2.add(temp);
+        }
+        
+        ECP Y3 = new ECP();
+        for(int i=0;i<threshold;i++){
+            Y3.add(PAIR256.G1mul(barWi[i], _di1[i]));
+        }
+        
+        ECP Y4 = new ECP();
+        for(int i=0;i<threshold;i++){
+            ECP temp = new ECP();
+            if(i==0){
+                temp.add(pk.get_a0());
+            }
+            else{
+                temp.add(Di[i-1]);
+            }
+            temp.add(PAIR256.G1mul(barWi[i], new BIG(i+1)));
+            temp = PAIR256.G1mul(temp, _di1[i]);
+            temp.add(PAIR256.G1mul(barWi[i], _di0[i]));
+            Y4.add(temp);
+        }
+                
+        
+        //verifier replies a challenge
+        BIG e = BIG.randomnum(order,RNG);        
+      
+        //prover sends response
+        //\hat{r}=\tilde{r}+er^{bar{l}+1}
+        _r.add(BIG.modmul(e, r.powmod(new BIG(threshold+1), order), order));
+        _r.mod(order);        
+        //\hat{y}=\tilde{y}+ey
+        _y.add(BIG.modmul(e, y, order));        
+        _y.mod(order);
+        //\hat{t_y}=\tilde{t_y}-ety
+        _ty.sub(BIG.modmul(e, BIG.modmul(cred.get_t(), y, order), order));  
+        _ty.mod(order);
+        //\hat{s}=\tilde{s}+esr^{bar{l}+1}
+        _s.add(BIG.modmul(e, BIG.modmul(cred.get_s(),r.powmod(new BIG(threshold+1), order),order), order));
+        _s.mod(order);
+            
+        
+        for(int i=0;i<threshold;i++){
+            _di1[i].add(BIG.modmul(e, r, order));
+            _di1[i].mod(order);
+            _di0[i].add(BIG.modmul(e, BIG.modmul(r,d[i],order), order));
+            _di0[i].mod(order);
+        }
+        
+        //verifier checks        
+        if(W.is_infinity() || R.is_infinity()){
+            for(int i=0;i<threshold;i++){
+                if(barWi[i].is_infinity() || Ri[i].is_infinity()){
+                    return false;
+                }
+            }
+        }
+        
+        //2nd pairings at left hand side
+        FP48[] ll=PAIR256.initmp();
+        ECP temp = new ECP();
+        
+        //compute R^{e(1+sum_i=1^\bar{l} i)}
+        int num = 1;
+        for(int i=0;i<threshold;i++){
+            num += i+1;
+        }
+        temp.add(PAIR256.G1mul(R, BIG.modmul(e, new BIG(num), order)));
+        
+        temp.add(PAIR256.G1mul(pk.get_b(), _s));
+        temp.add(PAIR256.G1mul(pk.get_c(), _r));
+        temp.add(PAIR256.G1mul(vprime, _ty));        
+        temp.sub(Y1);
+        
+        BIG[] m1 = new BIG[Aprime.length];
+        for(int i=0;i<Aprime.length;i++){
+            byte[] temph = H.digest(Aprime[i].getBytes());
+                byte[] hash = new byte[CONFIG_BIG.MODBYTES];
+                for(int j=0;j<hash.length;j++){
+                    if(j<temph.length)
+                        hash[j]=temph[j];
+                    else
+                        hash[j]=0x00;
+                }
+            m1[i] = BIG.fromBytes(hash);
+            m1[i].mod(order);
+        }
+        m1 = MPEncode(m1, order);
+        
+        ECP tempp = new ECP();
+        for(int i=0;i<m1.length;i++){
+            tempp.add(PAIR256.G1mul(pk.get_a()[i], m1[i]));            
+        }
+        temp.sub(PAIR256.G1mul(tempp, e));
+        
+        tempp = new ECP();
+        for(int i=0;i<Di.length;i++){
+            tempp.add(Di[i]);
+        }
+        temp.add(PAIR256.G1mul(tempp, e));
+        
+        for(int i=0;i<threshold;i++){
+            tempp = new ECP();
+            if(i==0){
+                tempp.add(pk.get_a0());
+            }
+            else{
+                tempp.add(Di[i-1]);
+            }
+            tempp.add(PAIR256.G1mul(barWi[i], new BIG(i+1)));
+            tempp.neg();
+            tempp = PAIR256.G1mul(tempp, _di0[i]);
+            temp.add(tempp);
+        }        
+        temp.sub(Y2);
+        
+        
+        tempp = new ECP();
+        for(int i=0;i<threshold;i++){
+            tempp.add(PAIR256.G1mul(Ri[i], new BIG(i+1)));
+        }
+        temp.sub(PAIR256.G1mul(tempp, e));
+                
+	PAIR256.another(ll,pk.get_g2(), temp);
+	
+        
+        //1st pairing at left hand side
+        Wprime.add(W);  
+        Wprime.add(pk.get_a0());
+        PAIR256.another(ll,D_bar_l, PAIR256.G1mul(Wprime,e));                        
+	FP48 left=PAIR256.fexp(PAIR256.miller(ll));
+        
+        FP48[] rr=PAIR256.initmp();        
+        //1st pairing at right hand side
+        temp = PAIR256.G1mul(vprime, _y);
+        temp.sub(V);
+        PAIR256.another(rr, pk.get_g2x(), temp);
+        
+        //2nd paring        
+        temp = new ECP();
+        for(int i=0;i<threshold;i++){
+            temp.add(PAIR256.G1mul(barWi[i],_di1[i]));
+        }
+        temp.sub(Y3);
+        PAIR256.another(rr, pk.get_X()[2], temp);
+        
+        
+        //3rd paring
+        temp = new ECP();
+        
+        for(int i=0;i<threshold;i++){
+            tempp = new ECP();
+            if(i==0){
+                tempp.add(pk.get_a0());
+            }
+            else{
+                tempp.add(Di[i-1]);
+            }
+            tempp.add(PAIR256.G1mul(barWi[i], new BIG(i+1)));
+            tempp = PAIR256.G1mul(tempp, _di1[i]);
+            tempp.add(PAIR256.G1mul(barWi[i], _di0[i]));
+            temp.add(tempp);
+        }
+        
+        tempp = new ECP();
+        for(int i=0;i<threshold;i++){
+            tempp.add(Ri[i]);
+        }
+        temp.add(PAIR256.G1mul(tempp, e));
+        
+        temp.sub(Y4);
+        temp.sub(PAIR256.G1mul(R, BIG.modmul(e, new BIG(threshold), order)));
+        PAIR256.another(rr, pk.get_X()[1], temp);
+        
+	FP48 right=PAIR256.fexp(PAIR256.miller(rr));
+        
+                
+        if(left.equals(right)){
+            return true;
+        }
+        else{
+            return false;
+        }
+        }
+        catch(NoSuchAlgorithmException e){
+            Logger.getLogger(SDHABC.class.getName()).log(Level.SEVERE, null, e);
+        } catch (Exception ex) {
+            Logger.getLogger(SDHABC.class.getName()).log(Level.SEVERE, null, ex);
+            throw new Exception("NANY proof: "+ex.getMessage());            
+        }
+        
+        return false;
+    }
+    
+    
+    public boolean flawedproofOfNAND(ABCpk pk, ABCcred cred, String[] Aprime) throws Exception{
         try{
         MessageDigest H = MessageDigest.getInstance("SHA-512");
         RAND RNG = new RAND();
@@ -800,7 +1397,7 @@ public class SDHABC {
         BIG[] z = new BIG[result[0].size()];
         for(int i=0;i<z.length;i++){   
             byte[] temp = H.digest(result[0].get(i).getBytes());
-                byte[] hash = new byte[80];
+                byte[] hash = new byte[CONFIG_BIG.MODBYTES];
                 for(int j=0;j<hash.length;j++){
                     if(j<temp.length)
                         hash[j]=temp[j];
@@ -812,7 +1409,7 @@ public class SDHABC {
         }
                 
         BIG[][] division = syntheticDivision(cred.get_alphas(),
-                                             convertToAlphas(z, order));
+                                             MPEncode(z, order));
         m = division[0]; //answer
         d = division[1]; //remainder
           
@@ -897,7 +1494,7 @@ public class SDHABC {
         z = new BIG[Aprime.length];
         for(int i=0;i<Aprime.length;i++){
             byte[] htemp = H.digest(Aprime[i].getBytes());
-                byte[] hash = new byte[80];
+                byte[] hash = new byte[CONFIG_BIG.MODBYTES];
                 for(int j=0;j<hash.length;j++){
                     if(j<htemp.length)
                         hash[j]=htemp[j];
@@ -907,7 +1504,7 @@ public class SDHABC {
             z[i] = BIG.fromBytes(hash);
             z[i].mod(order);
         }
-        z = convertToAlphas(z, order);
+        z = MPEncode(z, order);
         
         ECP8 temp2 = PAIR256.G2mul(pk.get_g2(), z[0]);
         for(int i=1;i<z.length;i++){
@@ -942,7 +1539,8 @@ public class SDHABC {
         return false;
     }
     
-    public boolean proofOfNANY(ABCpk pk, ABCcred cred, int threshold, String[] Aprime) throws Exception{
+    
+    public boolean flawedproofOfNANY(ABCpk pk, ABCcred cred, int threshold, String[] Aprime) throws Exception{
         try{
         MessageDigest H = MessageDigest.getInstance("SHA-512");
         RAND RNG = new RAND();
@@ -958,7 +1556,7 @@ public class SDHABC {
         BIG[] barw = new BIG[result[0].size()];
         for(int i=0;i<barw.length;i++){    
             byte[] temp = H.digest(result[0].get(i).getBytes());
-                byte[] hash = new byte[80];
+                byte[] hash = new byte[CONFIG_BIG.MODBYTES];
                 for(int j=0;j<hash.length;j++){
                     if(j<temp.length)
                         hash[j]=temp[j];
@@ -968,13 +1566,13 @@ public class SDHABC {
             barw[i] = BIG.fromBytes(hash);
             barw[i].mod(order);
         }
-        barw = convertToAlphas(barw, order);
+        barw = MPEncode(barw, order);
         
         //those remaining attributes in A', can be mixture of same and not same
         BIG[] w = new BIG[result[1].size()];
         for(int i=0;i<w.length;i++){  
             byte[] temp = H.digest(result[1].get(i).getBytes());
-                byte[] hash = new byte[80];
+                byte[] hash = new byte[CONFIG_BIG.MODBYTES];
                 for(int j=0;j<hash.length;j++){
                     if(j<temp.length)
                         hash[j]=temp[j];
@@ -984,7 +1582,7 @@ public class SDHABC {
             w[i] = BIG.fromBytes(hash);
             w[i].mod(order);
         }
-        w = convertToAlphas(w, order);
+        w = MPEncode(w, order);
                 
         BIG[][] division = syntheticDivision(cred.get_alphas(),
                                              barw);
@@ -1094,7 +1692,7 @@ public class SDHABC {
         BIG[] z = new BIG[Aprime.length];
         for(int i=0;i<Aprime.length;i++){
             byte[] htemp = H.digest(Aprime[i].getBytes());
-                byte[] hash = new byte[80];
+                byte[] hash = new byte[CONFIG_BIG.MODBYTES];
                 for(int j=0;j<hash.length;j++){
                     if(j<htemp.length)
                         hash[j]=htemp[j];
@@ -1104,7 +1702,7 @@ public class SDHABC {
             z[i] = BIG.fromBytes(hash);
             z[i].mod(order);
         }
-        z = convertToAlphas(z, order);
+        z = MPEncode(z, order);
         
         ECP tempp = PAIR256.G1mul(pk.get_a0(), z[0]);
         for(int i=1;i<z.length;i++){
@@ -1261,7 +1859,7 @@ public class SDHABC {
         }
     }  
         
-    public BIG[] convertToAlphas(BIG[] A,BIG order){   
+    public BIG[] MPEncode(BIG[] A,BIG order){   
         BIG[] L = new BIG[A.length+1];
         
         for(int i=0;i<L.length;i++){
@@ -1365,7 +1963,7 @@ public class SDHABC {
     */
     
     /*
-    * @return BIG[] with last element BIG[1] as the remainder.
+    * @return BIG[] with the first element BIG[0] as quotient and the last element BIG[1] as remainder.
     */
     public BIG[][] syntheticDivision(BIG[] dvdend, BIG[] dvsor){
         //BIG order = new BIG(ROM.CURVE_Order);
@@ -1433,28 +2031,50 @@ public class SDHABC {
     }
     
     public BigInteger toBigInteger(BIG num){
-        return new BigInteger(num.toString().replaceFirst("^0+(?!$)", ""),16);
+        byte[] b = new byte[CONFIG_BIG.MODBYTES];
+        num.toBytes(b);
+        return new BigInteger(b);
+        //return new BigInteger(num.toString().replaceFirst("^0+(?!$)", ""),16);
     }
     
     public BIG toBIG(BigInteger num){
-        String str = num.toString(16);
-        String prefix="";
-        String order = new BIG(ROM.CURVE_Order).toString();
-        if(str.length()<order.length()){
-            
-            for(int i=0;i<order.length()-str.length();i++){
-                prefix+="0";
+//        String str = num.toString(16);
+//        String prefix="";
+//        String order = new BIG(ROM.CURVE_Order).toString();
+//        if(str.length()<order.length()){
+//            
+//            for(int i=0;i<order.length()-str.length();i++){
+//                prefix+="0";
+//            }
+//            prefix+=str;
+//        }
+//        
+//        byte[] val = new byte[prefix.length() / 2];
+//        for (int i = 0; i < val.length; i++) {
+//            int index = i * 2;
+//            int j = Integer.parseInt(prefix.substring(index, index + 2), 16);
+//            val[i] = (byte) j;
+//        }
+//        return BIG.fromBytes(val);
+
+        byte[] b = new byte[CONFIG_BIG.MODBYTES];        
+        byte[] val = num.toByteArray();
+        
+        int j=val.length-1;
+        for(int i=b.length-1;i>=0;i--){
+            if(j>-1){
+                b[i] = val[j];
+                j--;
+            }else{
+                if(num.signum()==-1){
+                    b[i] = (byte) 0xff;
+                }else{
+                    b[i] = (byte) 0x00;
+                }
             }
-            prefix+=str;
         }
         
-        byte[] val = new byte[prefix.length() / 2];
-        for (int i = 0; i < val.length; i++) {
-            int index = i * 2;
-            int j = Integer.parseInt(prefix.substring(index, index + 2), 16);
-            val[i] = (byte) j;
-        }
-        return BIG.fromBytes(val);
+        return BIG.fromBytes(b);
     }
     
     /*
