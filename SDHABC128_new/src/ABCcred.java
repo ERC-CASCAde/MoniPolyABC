@@ -15,16 +15,16 @@ import org.apache.milagro.amcl.BLS461.ECP;
 public class ABCcred {
     private final BIG t,s;
     private final ECP v;
-    private final BIG[] alphas, alphasNoO;
+    private final BIG[] alphas;//, alphasNoO;
     private final String[] A;
     
-    public ABCcred(BIG t, BIG s, ECP v, String[] A, BIG[] alphas, BIG[] alphasNoO){
+    public ABCcred(BIG t, BIG s, ECP v, String[] A, BIG[] alphas){//, BIG[] alphasNoO){
         this.t = t;
         this.s = s;
         this.v = v;      
         this.A = A;
         this.alphas = alphas;
-        this.alphasNoO = alphasNoO;
+        //this.alphasNoO = alphasNoO;
     }
     
     public BIG get_t(){
@@ -43,10 +43,6 @@ public class ABCcred {
         return alphas;
     }
 
-    public BIG[] get_alphasNoO(){
-        return alphasNoO;
-    }
-    
     public String[] get_A(){
         return A;
     }

@@ -485,18 +485,22 @@ public class ABCdemo extends javax.swing.JFrame {
     }//GEN-LAST:event_nanyLogicBtnActionPerformed
 
     private void benchmarkBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_benchmarkBtnActionPerformed
-            // TODO add your handling code here:
+        // TODO add your handling code here:
         String str = "",raw="";
         try{
             
             str+="Credential Size,Algorithm,Time (ms)\n";                
-            for(int n=0;n<5;n++){
-                raw+="Attribute size: "+((n+1)*50)+"\n";
+            for(int n=0;n<4;n++){
+                raw+="Attribute size: "+((n+1)*250)+"\n";
                 raw+="Round,issuing,possession,AND,OR,ANY(3),ANY(5),ANY(7),ANY(9),NAND,NOR,NANY(3),NANY(5),NANY(7),NANY(9)\n";
                 
                 int round = Integer.parseInt(roundText.getText());
                 int warmup = (int) (round*0.1);                
-                setupTT=issueTT=proofTT=andTT=nandTT=0;
+                setupTT=0;
+                issueTT=0;
+                proofTT=0;
+                andTT=0;
+                nandTT=0;
                 for(int i=0;i<anyTT.length;i++){
                     anyTT[i]=nanyTT[i]=0;
                 }
@@ -507,7 +511,7 @@ public class ABCdemo extends javax.swing.JFrame {
                 
                     //temporary moved here for lesser time
                     //setupT = System.nanoTime();
-                    param = abc.Setup(Integer.parseInt(attrSizeText.getText()));
+                    param = abc.Setup((n+1)*250+10);//(Integer.parseInt(attrSizeText.getText()));
                     //setupT = System.nanoTime() - setupT;
                     //if(i>warmup-1){
                     //    setupTT+=setupT;
@@ -515,7 +519,7 @@ public class ABCdemo extends javax.swing.JFrame {
                     //}
                     
                 for(int i=0;i<round+warmup;i++){
-                    System.out.println(((n+1)*50)+":"+i);
+                    System.out.println(((n+1)*250)+":"+i);
                     raw+=(i+1)+",";
                     
                     //place setup here
@@ -527,7 +531,7 @@ public class ABCdemo extends javax.swing.JFrame {
                     sk=param.getSK();
                     
                     attr = IssueAttrText.getText();
-                    for(int k=IssueAttrText.getText().split(",").length;k<(n+1)*50;k++)
+                    for(int k=IssueAttrText.getText().split(",").length;k<(n+1)*250;k++)
                         attr+=","+(k+1);
                     
 
@@ -538,7 +542,7 @@ public class ABCdemo extends javax.swing.JFrame {
                         issueTT+=issueT;
                         raw+=issueT+",";
                     }
-
+                    
                     proofT = System.nanoTime();
                     boolean result = abc.proofOfPossession(pk, cred);
                     proofT = System.nanoTime() - proofT;
@@ -546,7 +550,7 @@ public class ABCdemo extends javax.swing.JFrame {
                         proofTT+=proofT;
                         raw+=proofT+",";
                     }
-
+                                        
                     
                     andT = System.nanoTime();
                     result = abc.proofOfAND(pk, cred, andText.getText().split(","));
@@ -574,7 +578,8 @@ public class ABCdemo extends javax.swing.JFrame {
                         raw+=nandT+",";
                     }
 
-                    for(int j=0;j<5;j++){
+                    
+                    for(int j=4;j<5;j++){
                         nanyT = System.nanoTime();
                         result = abc.proofOfNANY(pk, cred, (j*2)+1, nanyText.getText().split(","));
                         nanyT = System.nanoTime() - nanyT;
@@ -589,34 +594,34 @@ public class ABCdemo extends javax.swing.JFrame {
         
                 TextArea.append("\nBenchmark of "+round+" rounds (excluding "+warmup+" rounds warm up) done.\n");
                 TextArea.append("Setup took: "+TimeUnit.MILLISECONDS.convert(setupTT/round, TimeUnit.NANOSECONDS)+"ms.\n");
-                str+=((n+1)*50)+",Issuing,"+TimeUnit.MILLISECONDS.convert(issueTT/round, TimeUnit.NANOSECONDS)+"\n";
+                str+=((n+1)*250)+",Issuing,"+TimeUnit.MILLISECONDS.convert(issueTT/round, TimeUnit.NANOSECONDS)+"\n";
                 TextArea.append("Issuing for "+attr.split(",").length+" attributes took: "+TimeUnit.MILLISECONDS.convert(issueTT/round, TimeUnit.NANOSECONDS)+"ms.\n");
-                str+=((n+1)*50)+",Possession,"+TimeUnit.MILLISECONDS.convert(proofTT/round, TimeUnit.NANOSECONDS)+"\n";
+                str+=((n+1)*250)+",Possession,"+TimeUnit.MILLISECONDS.convert(proofTT/round, TimeUnit.NANOSECONDS)+"\n";
                 TextArea.append("Proof of Possession took: "+TimeUnit.MILLISECONDS.convert(proofTT/round, TimeUnit.NANOSECONDS)+"ms.\n");
                 TextArea.append("AND of |A'|="+andText.getText().split(",").length+" took: "+TimeUnit.MILLISECONDS.convert(andTT/round, TimeUnit.NANOSECONDS)+"ms.\n");
                 for(int j=0;j<5;j++){
                     if(j==0){
-                        str+=((n+1)*50)+",OR,"+TimeUnit.MILLISECONDS.convert(anyTT[j]/round, TimeUnit.NANOSECONDS)+"\n";
+                        str+=((n+1)*250)+",OR,"+TimeUnit.MILLISECONDS.convert(anyTT[j]/round, TimeUnit.NANOSECONDS)+"\n";
                         TextArea.append("OR took: "+TimeUnit.MILLISECONDS.convert(anyTT[j]/round, TimeUnit.NANOSECONDS)+"ms.\n");
                     }
                     else{
-                        str+=((n+1)*50)+",ANY("+((j*2)+1)+"),"+TimeUnit.MILLISECONDS.convert(anyTT[j]/round, TimeUnit.NANOSECONDS)+"\n";
+                        str+=((n+1)*250)+",ANY("+((j*2)+1)+"),"+TimeUnit.MILLISECONDS.convert(anyTT[j]/round, TimeUnit.NANOSECONDS)+"\n";
                         TextArea.append("ANY("+((j*2)+1)+",A') took: "+TimeUnit.MILLISECONDS.convert(anyTT[j]/round, TimeUnit.NANOSECONDS)+"ms.\n");
                     }
                 }
-                str+=((n+1)*50)+",AND,"+TimeUnit.MILLISECONDS.convert(andTT/round, TimeUnit.NANOSECONDS)+"\n";
+                str+=((n+1)*250)+",AND,"+TimeUnit.MILLISECONDS.convert(andTT/round, TimeUnit.NANOSECONDS)+"\n";
                 TextArea.append("NAND of |A'|="+nandText.getText().split(",").length+" took: "+TimeUnit.MILLISECONDS.convert(nandTT/round, TimeUnit.NANOSECONDS)+"ms.\n");
                 for(int j=0;j<5;j++){
                     if(j==0){
-                        str+=((n+1)*50)+",NOR,"+TimeUnit.MILLISECONDS.convert(nanyTT[j]/round, TimeUnit.NANOSECONDS)+"\n";                    
+                        str+=((n+1)*250)+",NOR,"+TimeUnit.MILLISECONDS.convert(nanyTT[j]/round, TimeUnit.NANOSECONDS)+"\n";                    
                         TextArea.append("NOR took: "+TimeUnit.MILLISECONDS.convert(nanyTT[j]/round, TimeUnit.NANOSECONDS)+"ms.\n");
                     }
                     else{
-                        str+=((n+1)*50)+",NANY("+((j*2)+1)+"),"+TimeUnit.MILLISECONDS.convert(nanyTT[j]/round, TimeUnit.NANOSECONDS)+"\n";                    
+                        str+=((n+1)*250)+",NANY("+((j*2)+1)+"),"+TimeUnit.MILLISECONDS.convert(nanyTT[j]/round, TimeUnit.NANOSECONDS)+"\n";                    
                         TextArea.append("NANY("+((j*2)+1)+",A') took: "+TimeUnit.MILLISECONDS.convert(nanyTT[j]/round, TimeUnit.NANOSECONDS)+"ms.\n");
                     }
                 }
-                str+=((n+1)*50)+",NAND,"+TimeUnit.MILLISECONDS.convert(nandTT/round, TimeUnit.NANOSECONDS)+"\n";
+                str+=((n+1)*250)+",NAND,"+TimeUnit.MILLISECONDS.convert(nandTT/round, TimeUnit.NANOSECONDS)+"\n";
                 
             }
         }catch(Exception ex){

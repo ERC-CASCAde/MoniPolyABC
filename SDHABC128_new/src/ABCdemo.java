@@ -208,7 +208,7 @@ public class ABCdemo extends javax.swing.JFrame {
 
         jLabel7.setText("4. NANY(d=");
 
-        nThresholdText.setText("1");
+        nThresholdText.setText("2");
 
         jLabel8.setText(", A'=");
 
@@ -496,7 +496,7 @@ public class ABCdemo extends javax.swing.JFrame {
         boolean result = abc.proofOfNANY(pk, cred, Integer.parseInt(nThresholdText.getText()), nanyText.getText().split(","));
         nanyT = System.nanoTime() - nanyT;
         
-        TextArea.append("Flawed NANY proof: P(pk,cred,NOTANY(d,A'))<->V(pk,NOTANY(d,A')) completed?\n" +result+", in "+TimeUnit.MILLISECONDS.convert(nanyT, TimeUnit.NANOSECONDS)+"ms.\n");
+        TextArea.append("NANY proof: P(pk,cred,NOTANY(d,A'))<->V(pk,NOTANY(d,A')) completed?\n" +result+", in "+TimeUnit.MILLISECONDS.convert(nanyT, TimeUnit.NANOSECONDS)+"ms.\n");
         
         }catch(Exception ex){
             TextArea.append("Fails: "+ex.getMessage()+"\n");
@@ -558,6 +558,7 @@ public class ABCdemo extends javax.swing.JFrame {
                         raw+=issueT+",";
                     }
 
+                    
                     proofT = System.nanoTime();
                     boolean result = abc.proofOfPossession(pk, cred);
                     //boolean result = abc.proofOfPossessionOld(pk, cred);
@@ -593,7 +594,7 @@ public class ABCdemo extends javax.swing.JFrame {
                         nandTT+=nandT;
                         raw+=nandT+",";
                     }
-
+                    
                     for(int j=0;j<5;j++){
                         nanyT = System.nanoTime();
                         result = abc.proofOfNANY(pk, cred, (j*2)+1, nanyText.getText().split(","));
