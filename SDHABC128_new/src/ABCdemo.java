@@ -4,8 +4,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -657,9 +655,9 @@ public class ABCdemo extends javax.swing.JFrame {
                 fos.flush();
                 fos.close();
             } catch (FileNotFoundException ex) {
-                Logger.getLogger(ABCdemo.class.getName()).log(Level.SEVERE, null, ex);
+                TextArea.append("Error: "+ex.getLocalizedMessage()+"\n");
             } catch (IOException ex) {
-                Logger.getLogger(ABCdemo.class.getName()).log(Level.SEVERE, null, ex);
+                TextArea.append("Error: "+ex.getLocalizedMessage()+"\n");
             }
         }
     }//GEN-LAST:event_benchmarkBtnActionPerformed
