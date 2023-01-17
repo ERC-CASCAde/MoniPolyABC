@@ -21,94 +21,12 @@ import org.apache.milagro.amcl.RAND;
  * @author nsyt1
  */
 public class SDHABC {   
-    /*
-    public SDHABC(){
-        //y^2=x^3-7, found g=(2,1)
-        BigInteger r = toBigInteger(new BIG(ROM.CURVE_Order));
-        BigInteger p = toBigInteger(new BIG(ROM.Modulus));
-        
-        for(int i=-5;i<5;i++){        
-        BigInteger x = BigInteger.valueOf(i);        
-        System.out.println("x: "+x);
-        
-        x=x.modPow(BigInteger.valueOf(3), p);
-        BigInteger y = x.add(BigInteger.valueOf(-7)).mod(p);
-        y = y.modPow(BigInteger.valueOf(2).modInverse(r), p);
-        System.out.println("y: "+y);        
-
-        y=y.modPow(BigInteger.valueOf(2), p);        
-        y = y.subtract(BigInteger.valueOf(-7));
-        
-        x = y.modPow(BigInteger.valueOf(3).modInverse(r), p);
-        System.out.println("check: "+ x);        
-        }
-        System.out.println("r: "+r);
-        System.out.println("bits: "+r.bitLength());
-        System.out.println("p: "+p);        
-        System.out.println("bits: "+p.bitLength());
-        System.out.println(new BigInteger("7DE40020",16).bitLength());
-        
-        
-    }
-    */
-    /*
-    public SDHABC(){
-        //gen parameter u for BLS48
-        //35 bits ,g=(2,1)
-        //u: +2^3+2^6+2^25+2^35 = 802000048
-        //Curve is y^2=x^3+4 (or) 5 -3 -7 -18 
-        //p= 15B62274096F5CA43A83FB647D339F71B5FDE7506D117B83A7F2DFA895C8789656CD8AF3679770A6AE9931D982D29565ACC6A23AF21B364DDB26663FA58EA76A991BDB5950510AD56AF74B65AAB183 (629 bits) M-Type 
-        //
-        //u: -2^7-2^10-2^20+2^34-2^35 = -400100480
-        //Curve is y^2=x^3+4 (or) 20 -3 -15 -18 -21 
-        //p= 556D5F478F8956BFB608A85CDB8A7D73553F2FC98B23950D55807E1047A6D40E473633ABECFDA43D2FCE76FDA05E375FA1BFB62BCC0AC2ACF4F43DE5D49F34ECEF613758FEA800C543001692B (611 bits) M-Type
-        //
-        //36 bits 
-        //u: -2^6-2^15+2^19-2^36 = -FFFF88040
-        //Curve is y^2=x^3+6 (or) 16 -2 -11 -13 -14 -18 -20 
-        //p= 5552857893E46D52646955E2A21F5B024D81D2128F5543C3F32C871015A521C4C944AFEAB9CB474B97BCC3E38B50938CBF99E4A7C4A406F597D2C8C9D54A3B76438545960F945F2347F4DA580D696D2FEB (647 bits) D-Type
-        //
-        //u: -2^10+2^26-2^32-2^36 = -10FC000400
-        //Curve is y^2=x^3+5 (or) 9 16 -2 -12 -21 
-        //p= F9F2F1514FBC1C2BC341936AAA7183160DC814480D8DF6B7471750E68680A2B2CAAA824B890F889B529F7AAC5D4D460631C994C1CFBDFF1EC4FE805A98D7FBA5A921C60CA7FD5500602805829A56AFFEAB (648 bits) D-Type
-
-        BigInteger u,r,p;
-        BigInteger _2 = BigInteger.valueOf(2);
-        int i=0,bitone=0;
-        do{
-            do{
-                u = new BigInteger(36,new SecureRandom());
-            }while(u.bitCount()>14 | u.bitLength()<35 |
-                  !u.mod(BigInteger.valueOf(24)).mod(BigInteger.valueOf(3)).equals(BigInteger.ONE) |
-                  (!u.mod(BigInteger.valueOf(24)).mod(BigInteger.valueOf(8)).equals(BigInteger.ZERO) && 
-                  !u.mod(BigInteger.valueOf(24)).mod(BigInteger.valueOf(8)).equals(BigInteger.valueOf(7))));
-            //u = _2.pow(7).subtract(BigInteger.ONE).subtract(_2.pow(10)).subtract(_2.pow(30)).subtract(_2.pow(32));
-            //u = new BigInteger("7DE40020",16);
-            u=new BigInteger("802000048",16);
-            r = u.pow(16).subtract(u.pow(8)).add(BigInteger.ONE);
-            p = u.subtract(BigInteger.ONE).pow(2).divide(BigInteger.valueOf(3)).multiply(r).add(u);
-            i++;
-            System.out.println(i);
-        }while(!p.mod(BigInteger.valueOf(8)).equals(BigInteger.valueOf(3)) | !r.isProbablePrime(16) | !p.isProbablePrime(16)); 
-        
-        System.out.println("|GT points|/r is prime? "+p.pow(16).subtract(p.pow(8)).add(BigInteger.ONE).divide(r).isProbablePrime(16));
-        System.out.println(u.toString(16));        
-        System.out.println(u.bitCount());
-        System.out.println(u.bitLength());
-        System.out.println("u prime? " + u.isProbablePrime(16));        
-        System.out.println("u-1 prime? " + u.subtract(BigInteger.ONE).isProbablePrime(16));        
-        System.out.println("r prime? " + r.isProbablePrime(16));        
-        System.out.println(r.toString(16));
-        System.out.println(r.toString());
-        System.out.println(r.bitLength());
-        System.out.println("p prime? " + p.isProbablePrime(16));
-        System.out.println(p.toString(16));   
-        System.out.println(p.toString());
-        System.out.println(p.bitLength());
-        System.out.println(p.bitLength()/8);
-        System.out.println("p mod 8 = "+p.mod(BigInteger.valueOf(8)));
-    }
-    */
+    /**
+     * Generate ABC public and private keys.
+     * @param attrSize maximum size of attribute supported.
+     * 
+     * @return ABC parameter
+     */
     public ABCparam Setup(int attrSize){
         RAND RNG = new RAND();
         ECP[] a=new ECP[attrSize];
@@ -195,6 +113,17 @@ public class SDHABC {
         return new ABCparam(pk, sk);
     }
     
+    /**
+     * ABC Issuing protocol. It contains precomputation MPEncode(A) and MPEncode(A-o) where A={m_1,...,m_n-1,o}.
+     * 
+     * @param pk ABC public key.
+     * @param A Attribute set
+     * @param sk ABC secret key.
+     * 
+     * @throws Exception if |A| is greater than supported attribute size it fails or the protocol fails.
+     * 
+     * @return an ABC credential
+     */
     public ABCcred Issuing(ABCpk pk, String[] A, ABCsk sk) throws Exception{
         
         if(A.length>pk.get_a().length-1){
@@ -311,6 +240,14 @@ public class SDHABC {
         return null;
     }
     
+    /**
+     * ABC Proof of Possession protocol. It precomputes MPEncode(A) on attribute set A.
+     * 
+     * @param pk ABC public key.
+     * @param cred ABC credential.
+     * 
+     * @return true if the credential is legit corresponding to hidden attributes A; false otherwise.
+     */
     public boolean proofOfPossession(ABCpk pk, ABCcred cred){
         try{
         MessageDigest H = MessageDigest.getInstance("SHA-512");
@@ -432,6 +369,17 @@ public class SDHABC {
         return false;
     }    
     
+    /**
+     * ABC AND Proof protocol.
+     * 
+     * @param pk ABC public key.
+     * @param cred ABC credential.
+     * @param Aprime query attribute set.
+     * 
+     * @throws Exception if the searching for intersecting attributes fails or the protocol fails.
+     * 
+     * @return true if A' is subset or equal to A, false otherwise.
+     */
     public boolean proofOfAND(ABCpk pk, ABCcred cred, String[] Aprime) throws Exception{
         try{
         MessageDigest H = MessageDigest.getInstance("SHA-512");
@@ -578,6 +526,18 @@ public class SDHABC {
         return false;
     }
     
+    /**
+     * ABC ANY Proof protocol.
+     * 
+     * @param pk ABC public key.
+     * @param cred ABC credential.
+     * @param threshold the threshold \ell which is at most |A'| and at most |A|.
+     * @param Aprime query attribute set.
+     * 
+     * @throws Exception if the searching for intersecting attributes fails or the protocol fails.
+     * 
+     * @return true if A' intersected A for at least threshold-many attributes, false otherwise.
+     */
     public boolean proofOfANY(ABCpk pk, ABCcred cred, int threshold, String[] Aprime) throws Exception{
         try{
         MessageDigest H = MessageDigest.getInstance("SHA-512");
@@ -770,7 +730,17 @@ public class SDHABC {
         return false;
     }
     
-    
+    /**
+     * ABC NAND Proof protocol.
+     * 
+     * @param pk ABC public key.
+     * @param cred ABC credential.
+     * @param Aprime query attribute set.
+     * 
+     * @throws Exception if the searching for differing attributes fails or the protocol fails.
+     * 
+     * @return true if A' is disjoint to A, false otherwise.
+     */
     public boolean proofOfNAND(ABCpk pk, ABCcred cred, String[] Aprime) throws Exception{
         try{
         MessageDigest H = MessageDigest.getInstance("SHA-512");
@@ -1002,7 +972,18 @@ public class SDHABC {
         return false;
     }
     
-    
+    /**
+     * ABC NANY Proof protocol.
+     * 
+     * @param pk ABC public key.
+     * @param cred ABC credential.
+     * @param threshold the threshold \bar{\ell} is at most |A'| and at most |A|.
+     * @param Aprime query attribute set.
+     * 
+     * @throws Exception if the searching for differing attributes fails or the protocol fails.
+     * 
+     * @return true if |A' - A| graeter than or equals to threshold, false otherwise.
+     */
     public boolean proofOfNANY(ABCpk pk, ABCcred cred, int threshold, String[] Aprime) throws Exception{
         try{
         MessageDigest H = MessageDigest.getInstance("SHA-512");
@@ -1418,7 +1399,7 @@ public class SDHABC {
         return false;
     }
     
-    
+    //Flawed, leak info for compressed, kept for reference
     public boolean flawedproofOfNANY(ABCpk pk, ABCcred cred, int threshold, String[] Aprime) throws Exception{
         try{
         MessageDigest H = MessageDigest.getInstance("SHA-512");
@@ -1782,7 +1763,17 @@ public class SDHABC {
     }
     
     
-    
+    /**
+     * Search for the intersecting attributes.
+     * 
+     * @param threshold the set intersection threshold.
+     * @param A user attribute set.
+     * @param Aprime query attribute set.
+     * 
+     * @throws Exception if the searching for intersecting attributes fails.
+     * 
+     * @return A' \cup A and the remain A' - A = A' - (A \cup A').
+     */
     public ArrayList[] findSame(int threshold, String[] A, String[] Aprime) throws Exception{
         if(threshold<1){
             throw new Exception("Threshold must fall in between 1 <= threshold <= |A'|.");
@@ -1840,6 +1831,17 @@ public class SDHABC {
         }
     }
     
+    /**
+     * Search for the differing attributes.
+     * 
+     * @param threshold the set intersection threshold.
+     * @param A user attribute set.
+     * @param Aprime query attribute set.
+     * 
+     * @throws Exception if the searching for differing attributes fails.
+     * 
+     * @return A' - A and the remain A' \cup A = A' - (A' - A).
+     */
     public ArrayList[] findNotSame(int threshold, String[] A, String[] Aprime) throws Exception{
         if(threshold<1){
             throw new Exception("Threshold must fall in between 1 <= threshold <= |A'|.");
@@ -1894,6 +1896,14 @@ public class SDHABC {
         }
     }  
         
+    /**
+     * Encode monic polynomial roots into coefficients.
+     * 
+     * @param A attribute set that represent the roots.
+     * @param order the elliptic curve (sub-)group order.
+     * 
+     * @return coefficients of a monic polynomial.
+     */
     public BIG[] MPEncode(BIG[] A,BIG order){   
         BIG[] L = new BIG[A.length+1];
         
@@ -1997,9 +2007,14 @@ public class SDHABC {
     }
     */
     
-    /*
-    * @return BIG[] with the first element BIG[0] as quotient and the last element BIG[1] as remainder.
-    */
+    /**
+     * Synthetic division algorithm for polynomial division.
+     * 
+     * @param dvdend coefficients of dividend.
+     * @param dvsor coefficients of divisor.
+     * 
+     * @return first element BIG[0] as coefficients of quotient and the last element BIG[1] as coefficients of remainder.
+     */
     public BIG[][] syntheticDivision(BIG[] dvdend, BIG[] dvsor){
         //BIG order = new BIG(ROM.CURVE_Order);
         BigInteger order = toBigInteger(new BIG(ROM.CURVE_Order));        
@@ -2065,33 +2080,27 @@ public class SDHABC {
         };
     }
     
+    /**
+     * Convert a number in BIG datatype to a number in BigInteger datatype.
+     * 
+     * @param num the number in BIG to be converted.
+     * 
+     * @return the number in BigInteger.
+     */
     public BigInteger toBigInteger(BIG num){
         byte[] b = new byte[CONFIG_BIG.MODBYTES];
         num.toBytes(b);
         return new BigInteger(b);
-        //return new BigInteger(num.toString().replaceFirst("^0+(?!$)", ""),16);
     }
     
+    /**
+     * Convert a number in BigInteger datatype to a number in BIG.
+     * 
+     * @param num the number in BigInteger to be converted.
+     * 
+     * @return the number in BIG.
+     */
     public BIG toBIG(BigInteger num){
-//        String str = num.toString(16);
-//        String prefix="";
-//        String order = new BIG(ROM.CURVE_Order).toString();
-//        if(str.length()<order.length()){
-//            
-//            for(int i=0;i<order.length()-str.length();i++){
-//                prefix+="0";
-//            }
-//            prefix+=str;
-//        }
-//        
-//        byte[] val = new byte[prefix.length() / 2];
-//        for (int i = 0; i < val.length; i++) {
-//            int index = i * 2;
-//            int j = Integer.parseInt(prefix.substring(index, index + 2), 16);
-//            val[i] = (byte) j;
-//        }
-//        return BIG.fromBytes(val);
-
         byte[] b = new byte[CONFIG_BIG.MODBYTES];        
         byte[] val = num.toByteArray();
         
@@ -2112,126 +2121,7 @@ public class SDHABC {
         return BIG.fromBytes(b);
     }
     
-    /*
-    public int rho(String[] A, String attr){
-        
-        for(int i=0;i<A.length;i++){
-            if(A[i].equals(attr)){
-                return i;
-            }
-        }
-        
-        return -1;
-    }
     
-    public String[][] findSameXsame(boolean SAME, int threshold, String[] A, String[] Aprime){
-        String[] same;
-        String[] xsame;
-        String temp ="!";
-        String xtemp ="!";
-        int length = A.length;
-        int k=-1,j=0,i=0;
-                
-        if(Aprime.length>=length){
-            length = Aprime.length;
-            while(i<length){
-                k=rho(A,Aprime[i]);
-                if(SAME){
-                if(k>-1 && j<threshold){
-                    j++;
-                    temp=temp.concat(","+A[k]);     
-                    
-                }
-                else if(k>-1 && j>=threshold){
-                    xtemp = xtemp.concat(","+Aprime[i]);
-                }
-                else{
-                    xtemp = xtemp.concat(","+Aprime[i]);
-                }
-                }
-                else{
-                    if(k==-1 && j<threshold){
-                    j++;
-                    temp=temp.concat(","+Aprime[i]);     
-                    
-                    }
-                    else if(k==-1 && j>=threshold){
-                    xtemp = xtemp.concat(","+Aprime[i]);
-                    }
-                    else{
-                    xtemp = xtemp.concat(","+A[k]);
-                    }
-                }
-                i++;
-            }
-        }
-        else{
-            length = Aprime.length;
-            while(i<length){
-                k=rho(Aprime,A[i]);
-                
-                if(SAME){
-                if(k>-1 && j<threshold){
-                    j++;
-                    temp=temp.concat(","+A[k]);
-                }
-                else if(k>-1 && j>=threshold){
-                    xtemp = xtemp.concat(","+Aprime[i]);
-                }
-                else{
-                    xtemp = xtemp.concat(","+Aprime[i]);
-                }
-                }
-                else{
-                    if(k==-1 && j<threshold){
-                    j++;
-                    temp=temp.concat(","+Aprime[i]);     
-                    
-                    }
-                    else if(k==-1 && j>=threshold){
-                    xtemp = xtemp.concat(","+Aprime[i]);
-                    }
-                    else{
-                    xtemp = xtemp.concat(","+A[k]);
-                    }
-                }
-                i++;
-            }
-        }
-        
-        if(j==threshold){
-            //System.out.println("threshold met, temp: "+temp+", xtemp: "+xtemp);
-            temp.trim();
-            temp = temp.split("!")[1];
-            String[] tt = temp.split(",");
-            same = new String[tt.length-1]; 
-            for(i=1;i<tt.length;i++){                        
-                same[i-1]=tt[i];            
-            }
-        
-            if(xtemp.length()>1){
-                xtemp.trim();
-                xtemp = xtemp.split("!")[1];
-                tt = xtemp.split(",");
-                xsame = new String[tt.length-1]; 
-                for(i=1;i<tt.length;i++){                        
-                    xsame[i-1]=tt[i];            
-                }
-            }
-            else{
-                xsame=null;
-            }
-            String[][] result = new String[2][];
-            result[0]=same;
-            result[1]=xsame;
-            return result;
-        }
-        else{
-            //System.out.println("threshold="+threshold+", j="+j+", threshold not met:"+temp);
-            return null;
-        }
-    }
-    */  
     
 }
 

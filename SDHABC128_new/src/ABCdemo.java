@@ -689,7 +689,7 @@ public class ABCdemo extends javax.swing.JFrame {
         nandT = System.nanoTime();
         boolean result = abc.proofOfNAND(pk, cred, nandText.getText().split(","));
         nandT = System.nanoTime() - nandT;
-        TextArea.append("Flawed NAND proof: P(pk,cred,NAND(A'))<->V(pk,NAND(A')) completed?\n" +result+", in "+TimeUnit.MILLISECONDS.convert(nandT, TimeUnit.NANOSECONDS)+"ms.\n");
+        TextArea.append("NAND proof: P(pk,cred,NAND(A'))<->V(pk,NAND(A')) completed?\n" +result+", in "+TimeUnit.MILLISECONDS.convert(nandT, TimeUnit.NANOSECONDS)+"ms.\n");
         
         }catch(Exception ex){
             TextArea.append("Fails: "+ex.getMessage()+"\n");
